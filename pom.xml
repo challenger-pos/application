@@ -9,11 +9,11 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.fiap</groupId>
-	<artifactId>application</artifactId>
+	<artifactId>challenge</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>application</name>
-	<description>Challenge App</description>
+	<name>challenge</name>
+	<description>Challenge One</description>
 	<url/>
 	<licenses>
 		<license/>
