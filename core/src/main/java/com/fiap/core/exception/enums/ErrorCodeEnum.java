@@ -32,6 +32,8 @@ public enum ErrorCodeEnum {
     WORK0004("Status informado é inválido ou não permitido para a ordem de serviço.", "WORK-0004"),
     WORK0005("Status informado já foi atribuído para a ordem de serviço.", "WORK-0005"),
     WORK0006("Ordem de serviço não se encontra pendente de aprovação", "WORK-0006"),
+    WORK0007("Ordem de serviço não está vinculada ao CPF na sessão", "WORK-0007"),
+    WORK0008("Token de cliente obrigatório", "WORK-0008"),
 
     HIST0001("Histórico de ordens de serviço não encontrado para o CPF/CNPJ informado.", "HIST-0001");
 

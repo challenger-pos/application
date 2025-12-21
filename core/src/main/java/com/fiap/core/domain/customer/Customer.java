@@ -13,15 +13,17 @@ public class Customer {
     private DocumentNumber documentNumber;
     private String phone;
     private Email email;
+    private Boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Customer(UUID id, String name, DocumentNumber documentNumber, String phone, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Customer(UUID id, String name, DocumentNumber documentNumber, String phone, String email, Boolean isActive, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.documentNumber = documentNumber;
         this.phone = phone;
         this.email = new Email(email);
+        this.isActive = isActive;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -41,6 +43,7 @@ public class Customer {
         this.phone = phone;
         this.email = Email.of(email);
         this.createdAt = LocalDateTime.now();
+        this.isActive = true;
     }
 
     public Customer(UUID id) {
@@ -102,22 +105,47 @@ public class Customer {
         this.updatedAt = updatedAt;
     }
 
-    @Override
-    public final boolean equals(Object o) {
-        if (!(o instanceof Customer customer)) return false;
+    public Boolean getIsActive() {
+        return isActive;
+    }
 
-        return getId().equals(customer.getId()) && getName().equals(customer.getName()) && getDocumentNumber().equals(customer.getDocumentNumber()) && getPhone().equals(customer.getPhone()) && getEmail().equals(customer.getEmail()) && getCreatedAt().equals(customer.getCreatedAt()) && Objects.equals(getUpdatedAt(), customer.getUpdatedAt());
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public void updateFrom(Customer changes) {
+        this.name = changes.getName();
+        this.email = changes.getEmail();
+        this.phone = changes.getPhone();
+        this.documentNumber = changes.getDocumentNumber();
     }
 
     @Override
-    public int hashCode() {
-        int result = getId().hashCode();
-        result = 31 * result + getName().hashCode();
-        result = 31 * result + getDocumentNumber().hashCode();
-        result = 31 * result + getPhone().hashCode();
-        result = 31 * result + getEmail().hashCode();
-        result = 31 * result + getCreatedAt().hashCode();
-        result = 31 * result + Objects.hashCode(getUpdatedAt());
-        return result;
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Customer customer)) return false;
+
+        return Objects.equals(id, customer.id)
+                && Objects.equals(name, customer.name)
+                && Objects.equals(documentNumber, customer.documentNumber)
+                && Objects.equals(phone, customer.phone)
+                && Objects.equals(email, customer.email)
+                && Objects.equals(isActive, customer.isActive)
+                && Objects.equals(createdAt, customer.createdAt)
+                && Objects.equals(updatedAt, customer.updatedAt);
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(
+                id,
+                name,
+                documentNumber,
+                phone,
+                email,
+                isActive,
+                createdAt,
+                updatedAt
+        );
     }
 }

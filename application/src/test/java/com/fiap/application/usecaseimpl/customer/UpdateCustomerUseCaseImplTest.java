@@ -44,7 +44,7 @@ class UpdateCustomerUseCaseImplTest {
         Customer oldC = customer(id, "A", "39053344705", "9999", "a@b.com");
         Customer updC = customer(id, "A+", "39053344705", "8888", "a@b.com");
         when(customerGateway.findById(id)).thenReturn(Optional.of(oldC));
-        when(customerGateway.update(updC)).thenReturn(updC);
+        when(customerGateway.update(any(Customer.class))).thenReturn(updC);
 
         UpdateCustomerUseCaseImpl useCase = new UpdateCustomerUseCaseImpl(
                 documentNumberAvailableUseCase, emailAvailableUseCase, customerGateway);
@@ -67,7 +67,7 @@ class UpdateCustomerUseCaseImplTest {
         when(customerGateway.findById(id)).thenReturn(Optional.of(oldC));
         when(documentNumberAvailableUseCase.documentNumberAvailable("27865757000102")).thenReturn(true);
         when(emailAvailableUseCase.emailAvailable("x@y.com")).thenReturn(true);
-        when(customerGateway.update(updC)).thenReturn(updC);
+        when(customerGateway.update(any(Customer.class))).thenReturn(updC);
 
         UpdateCustomerUseCaseImpl useCase = new UpdateCustomerUseCaseImpl(
                 documentNumberAvailableUseCase, emailAvailableUseCase, customerGateway);

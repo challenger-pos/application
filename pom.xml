@@ -41,6 +41,7 @@
 		<postgresql.driver.version>42.7.3</postgresql.driver.version>
 		<spring.boot.version>3.5.0</spring.boot.version>
 		<lombok.version>1.18.30</lombok.version>
+		<jjwt.version>0.11.5</jjwt.version>
 	</properties>
 
 	<dependencyManagement>
@@ -128,6 +129,25 @@
            		<artifactId>spring-boot-starter-actuator</artifactId>
 				<version>${spring.boot.version}</version>
         	</dependency>
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt-api</artifactId>
+				<version>${jjwt.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt-impl</artifactId>
+				<version>${jjwt.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt-jackson</artifactId>
+				<version>${jjwt.version}</version>
+				<scope>runtime</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
