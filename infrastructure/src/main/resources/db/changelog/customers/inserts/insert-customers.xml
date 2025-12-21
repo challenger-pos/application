@@ -12,6 +12,7 @@
             <column name="document_number" value="57654441053"/>
             <column name="phone" value="11999999999"/>
             <column name="email" value="clienteTeste@cli.com.br"/>
+            <column name="is_active" valueBoolean="true"/>
             <column name="created_at" valueComputed="now()"/>
             <column name="updated_at" valueComputed="now()"/>
         </insert>
@@ -21,6 +22,7 @@
             <column name="document_number" value="69216267097"/>
             <column name="phone" value="1163874168"/>
             <column name="email" value="clienteTeste2@cli.com.br"/>
+            <column name="is_active" valueBoolean="true"/>
             <column name="created_at" valueComputed="now()"/>
             <column name="updated_at" valueComputed="now()"/>
         </insert>
@@ -31,6 +33,7 @@
             <column name="document_number" value="25360284021"/>
             <column name="phone" value="11988887777"/>
             <column name="email" value="maria.silva@email.com"/>
+            <column name="is_active" valueBoolean="true"/>
             <column name="created_at" valueComputed="now()"/>
             <column name="updated_at" valueComputed="now()"/>
         </insert>
@@ -41,6 +44,7 @@
             <column name="document_number" value="03101555094"/>
             <column name="phone" value="11977776666"/>
             <column name="email" value="jose.santos@email.com"/>
+            <column name="is_active" valueBoolean="true"/>
             <column name="created_at" valueComputed="now()"/>
             <column name="updated_at" valueComputed="now()"/>
         </insert>
@@ -51,6 +55,7 @@
             <column name="document_number" value="14009626097"/>
             <column name="phone" value="11966665555"/>
             <column name="email" value="ana.oliveira@email.com"/>
+            <column name="is_active" valueBoolean="false"/>
             <column name="created_at" valueComputed="now()"/>
             <column name="updated_at" valueComputed="now()"/>
         </insert>

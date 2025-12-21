@@ -41,7 +41,9 @@ public class UpdateCustomerUseCaseImpl implements UpdateCustomerUseCase {
             throw new EmailException(ErrorCodeEnum.CAD0003.getMessage(), ErrorCodeEnum.CAD0003.getCode());
         }
 
-        Customer customerUpdated = customerGateway.update(customer);
+        oldCustomer.updateFrom(customer);
+        Customer customerUpdated = customerGateway.update(oldCustomer);
+
         if (Objects.isNull(customerUpdated)) {
             throw new InternalServerErrorException(ErrorCodeEnum.CAD0004.getMessage(), ErrorCodeEnum.CAD0004.getCode());
         }

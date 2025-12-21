@@ -6,7 +6,6 @@ import com.fiap.mapper.customer.CustomerMapper;
 import com.fiap.persistence.entity.customer.CustomerEntity;
 import com.fiap.persistence.repository.customer.CustomerEntityRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
