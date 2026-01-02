@@ -15,3 +15,7 @@ variable "private_subnet_ids" {
 variable "vpc_link_sg_id" {
   type = string
 }
+
+variable "environment" {
+  type    = string
+}

@@ -3,7 +3,7 @@ data "terraform_remote_state" "auth_lambda" {
 
   config = {
     bucket = "tf-state-challenge-bucket"
-    key    = "lambda/terraform.tfstate"
+    key    = "lambda/${var.environment}/terraform.tfstate"
     region = "us-east-2"
   }
 }

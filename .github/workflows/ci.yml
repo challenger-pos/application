@@ -7,10 +7,16 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+env:
+  TERRAFORM_APP_DIR: infra
+  TERRAFORM_API_GW_DIR: infra/aws/apigateway
+  ENVIRONMENT: ${{ github.ref_name == 'main' && 'production' || 'develop' }}
+
 jobs:
   build-and-test:
     name: Build and Test Project
     runs-on: self-hosted
+    environment: ${{ github.ref_name == 'main' && 'production' || 'develop' }}
 
     env:
       IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/challengeone
@@ -47,11 +53,11 @@ jobs:
     name: Push Image & Deploy Infra
     runs-on: self-hosted
     needs: build-and-test  # ✅ Só executa após o primeiro job terminar com sucesso
+    environment: ${{ github.ref_name == 'main' && 'production' || 'develop' }}
 
     env:
       IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/challengeone
       IMAGE_TAG: 1.0
-      TERRAFORM_DIR: infra/
 
     steps:
       # 1️⃣ Reset do credential store do Docker
@@ -96,9 +102,17 @@ jobs:
 #          fi
 
       - name: Terraform Init
-        working-directory: ${{ env.TERRAFORM_DIR }}
-        run: terraform init
+        working-directory: ${{ env.TERRAFORM_APP_DIR }}
+        run: terraform init -backend-config="key=api_gateway/${ENVIRONMENT}/terraform.tfstate"
 
       - name: Terraform Apply
-        working-directory: ${{ env.TERRAFORM_DIR }}
+        working-directory: ${{ env.TERRAFORM_APP_DIR }}
+        run: terraform apply -auto-approve
+
+      - name: Terraform Gateway Init
+        working-directory: ${{ env.TERRAFORM_API_GW_DIR }}
+        run: terraform init -backend-config="key=api_gateway/${ENVIRONMENT}/terraform.tfstate"
+
+      - name: Terraform Gateway Apply
+        working-directory: ${{ env.TERRAFORM_API_GW_DIR }}
         run: terraform apply -auto-approve
