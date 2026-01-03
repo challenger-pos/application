@@ -27,14 +27,18 @@ public class CustomerController {
     private final FindCustomerByDocumentUseCase findCustomerByDocumentUseCase;
     private final UpdateCustomerUseCase updateCustomerUseCase;
     private final DeleteCustomerUseCase deleteCustomerUseCase;
+    private final ActiveCustomerUseCase activeCustomerUseCase;
+    private final InactiveCustomerUseCase inactiveCustomerUseCase;
     private final CustomerMapper customerMapper;
 
-    public CustomerController(CreateCustomerUseCase createCustomerUseCase, FindCustomerByIdUseCase findCustomerByIdUseCase, FindCustomerByDocumentUseCase findCustomerByDocumentUseCase, UpdateCustomerUseCase updateCustomerUseCase, DeleteCustomerUseCase deleteCustomerUseCase, CustomerMapper customerMapper) {
+    public CustomerController(CreateCustomerUseCase createCustomerUseCase, FindCustomerByIdUseCase findCustomerByIdUseCase, FindCustomerByDocumentUseCase findCustomerByDocumentUseCase, UpdateCustomerUseCase updateCustomerUseCase, DeleteCustomerUseCase deleteCustomerUseCase, ActiveCustomerUseCase activeCustomerUseCase, InactiveCustomerUseCase inactiveCustomerUseCase, CustomerMapper customerMapper) {
         this.createCustomerUseCase = createCustomerUseCase;
         this.findCustomerByIdUseCase = findCustomerByIdUseCase;
         this.findCustomerByDocumentUseCase = findCustomerByDocumentUseCase;
         this.updateCustomerUseCase = updateCustomerUseCase;
         this.deleteCustomerUseCase = deleteCustomerUseCase;
+        this.activeCustomerUseCase = activeCustomerUseCase;
+        this.inactiveCustomerUseCase = inactiveCustomerUseCase;
         this.customerMapper = customerMapper;
     }
 
@@ -58,6 +62,28 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse> updateCustomer(@PathVariable UUID id, @RequestBody UpdateCustomerRequest request) throws DocumentNumberException, EmailException, NotFoundException, InternalServerErrorException {
         Customer customer = updateCustomerUseCase.execute(customerMapper.toDomain(id, request));
         return ResponseEntity.ok().body(customerMapper.toResponse(customer));
+    }
+
+    @Operation(
+            summary = "Ativa um cliente existente",
+            description = "Endpoint para ativar um cliente pelo ID.")
+    @ApiResponses(
+            value = { @ApiResponse(responseCode = "200", description = "Cliente ativado com sucesso.") })
+    @PutMapping("/active/{id}")
+    public ResponseEntity<Void> activeCustomer(@PathVariable UUID id) throws DocumentNumberException, NotFoundException {
+        activeCustomerUseCase.execute(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "Inativa um cliente existente",
+            description = "Endpoint para inativar um cliente pelo ID.")
+    @ApiResponses(
+            value = { @ApiResponse(responseCode = "200", description = "Cliente inativado com sucesso.") })
+    @PutMapping("/inactive/{id}")
+    public ResponseEntity<Void> inactiveCustomer(@PathVariable UUID id) throws DocumentNumberException, NotFoundException {
+        inactiveCustomerUseCase.execute(id);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(

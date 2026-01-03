@@ -1,9 +1,7 @@
 package com.fiap.controller;
 
 import com.fiap.core.domain.workorder.WorkOrder;
-import com.fiap.core.exception.BadRequestException;
-import com.fiap.core.exception.BusinessRuleException;
-import com.fiap.core.exception.NotFoundException;
+import com.fiap.core.exception.*;
 import com.fiap.dto.workorder.*;
 import com.fiap.mapper.workorder.WorkOrderHistoryMapper;
 import com.fiap.mapper.workorder.WorkOrderMapper;
@@ -12,6 +10,7 @@ import com.fiap.usecase.workorder.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -124,8 +123,11 @@ public class WorkOrderController {
     @ApiResponses(
             value = { @ApiResponse(responseCode = "200", description = "Status da ordem de serviço obtido com sucesso.") })
     @GetMapping("/{id}/status")
-    public ResponseEntity<WorkOrderStatusResponse> getWorkOrderStatus(@PathVariable UUID id) throws NotFoundException {
-        var status = getWorkOrderStatusUseCase.execute(id);
+    public ResponseEntity<WorkOrderStatusResponse> getWorkOrderStatus(@PathVariable UUID id, HttpServletRequest request) throws NotFoundException, ForbiddenException, UnauthorizedException {
+
+        String documentNumber = (String) request.getAttribute("documentNumber");
+
+        var status = getWorkOrderStatusUseCase.execute(id, documentNumber);
         return ResponseEntity.ok().body(new WorkOrderStatusResponse(id, status.getDescription()));
     }
 
@@ -135,8 +137,11 @@ public class WorkOrderController {
     @ApiResponses(
             value = { @ApiResponse(responseCode = "200", description = "Ordem de serviço aprovada com sucesso.") })
     @PatchMapping("/{id}/approve")
-    public ResponseEntity<String> approveWorkOrder(@PathVariable UUID id) throws NotFoundException, BadRequestException {
-        approveWorkOrderUseCase.execute(id);
+    public ResponseEntity<String> approveWorkOrder(@PathVariable UUID id, HttpServletRequest request) throws NotFoundException, BadRequestException, UnauthorizedException, ForbiddenException {
+
+        String documentNumber = (String) request.getAttribute("documentNumber");
+
+        approveWorkOrderUseCase.execute(id, documentNumber);
         return ResponseEntity.ok("Ordem de Serviço aprovada.");
     }
 
@@ -146,8 +151,11 @@ public class WorkOrderController {
     @ApiResponses(
             value = { @ApiResponse(responseCode = "200", description = "Ordem de serviço recusada com sucesso.") })
     @PatchMapping("/{id}/refuse")
-    public ResponseEntity<String> refuseWorkOrder(@PathVariable UUID id) throws NotFoundException, BadRequestException, BusinessRuleException {
-        refuseWorkOrderUseCase.execute(id);
+    public ResponseEntity<String> refuseWorkOrder(@PathVariable UUID id, HttpServletRequest request) throws NotFoundException, BadRequestException, BusinessRuleException, UnauthorizedException, ForbiddenException {
+
+        String documentNumber = (String) request.getAttribute("documentNumber");
+
+        refuseWorkOrderUseCase.execute(id, documentNumber);
         return ResponseEntity.ok("Ordem de Serviço recusada.");
     }
 
