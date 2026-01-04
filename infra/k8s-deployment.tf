@@ -50,11 +50,31 @@ resource "kubernetes_deployment" "challengeone_app" {
 
           env {
             name  = "SPRING_DATASOURCE_URL"
-            value = "jdbc:h2:mem:testdb"
+            value = "jdbc:postgresql://${data.terraform_remote_state.rds.outputs.rds_endpoint_host}:${data.terraform_remote_state.rds.outputs.db_port}/${data.terraform_remote_state.rds.outputs.db_name}?currentSchema=${var.environment}"
           }
+
           env {
-            name  = "SPRING_DATASOURCE_DRIVERCLASSNAME"
-            value = "org.h2.Driver"
+            name  = "SPRING_DATASOURCE_USERNAME"
+            value = data.terraform_remote_state.rds.outputs.db_username
+          }
+
+          env {
+            name  = "SPRING_DATASOURCE_PASSWORD"
+            value = var.db_password
+          }
+
+          env {
+            name  = "DB_SCHEMA"
+            value = var.environment
+          }
+
+          startup_probe {
+            http_get {
+              path = "/api/actuator/health/liveness"
+              port = 8080
+            }
+            failure_threshold = 15
+            period_seconds    = 10
           }
 
           liveness_probe {
@@ -62,10 +82,17 @@ resource "kubernetes_deployment" "challengeone_app" {
               path = "/api/actuator/health/liveness"
               port = 8080
             }
-            initial_delay_seconds = 10
+            period_seconds  = 10
+            timeout_seconds = 5
+            failure_threshold = 3
+          }
+
+          readiness_probe {
+            http_get {
+              path = "/api/actuator/health/readiness"
+              port = 8080
+            }
             period_seconds        = 10
-            timeout_seconds       = 2
-            failure_threshold     = 3
           }
           # Recursos otimizados para free tier (t3.micro tem 1 CPU, 1GB RAM)
           resources {
