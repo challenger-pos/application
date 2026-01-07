@@ -26,7 +26,7 @@ resource "kubernetes_service" "challengeone_app" {
   ]
   metadata {
     name      = "challengeone-service"
-    namespace = kubernetes_namespace.challengeone.metadata[0].name
+    namespace = var.challengeone_namespace_name
     labels = {
       app = "challengeone"
     }

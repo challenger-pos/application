@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket = "challengeone-g19"
-    key    = "challengeOne/terraform.tfstate"
-    region = "us-east-1"
+    bucket = "tf-state-challenge-bucket"
+    key    = "app/dev/terraform.tfstate"
+    region = "us-east-2"
   }
 }

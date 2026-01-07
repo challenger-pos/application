@@ -5,13 +5,13 @@ resource "kubernetes_deployment" "challengeone_app" {
   # ]
   # Comentado para testar deployment sem banco de dados
 
-  depends_on = [
-    kubernetes_namespace.challengeone 
-  ]
+  # depends_on = [
+  #   kubernetes_namespace.var.challengeone_namespace_name
+  # ]
 
   metadata {
     name      = "challengeone"
-    namespace = kubernetes_namespace.challengeone.metadata[0].name
+    namespace = var.challengeone_namespace_name
   }
 
   spec {
@@ -41,28 +41,27 @@ resource "kubernetes_deployment" "challengeone_app" {
             container_port = 8080
           }
 
-          # env_from {
-          #   secret_ref {
-          #     name = kubernetes_secret.challengeone_db.metadata[0].name
-          #   }
-          # }
-          # Comentado para testar sem banco de dados
+          env_from {
+            secret_ref {
+              name = kubernetes_secret.challengeone_db_secret.metadata[0].name
+            }
+          }
 
-          env {
-            name  = "SPRING_DATASOURCE_URL"
-            value = "jdbc:h2:mem:testdb"
-          }
-          env {
-            name  = "SPRING_DATASOURCE_DRIVERCLASSNAME"
-            value = "org.h2.Driver"
-          }
+          # env {
+          #   name  = "SPRING_DATASOURCE_URL"
+          #   value = "jdbc:h2:mem:testdb"
+          # }
+          # env {
+          #   name  = "SPRING_DATASOURCE_DRIVERCLASSNAME"
+          #   value = "org.h2.Driver"
+          # }
 
           liveness_probe {
             http_get {
               path = "/api/actuator/health/liveness"
               port = 8080
             }
-            initial_delay_seconds = 10
+            initial_delay_seconds = 120
             period_seconds        = 10
             timeout_seconds       = 2
             failure_threshold     = 3
