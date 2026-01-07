@@ -14,6 +14,8 @@ resource "kubernetes_deployment" "challengeone_app" {
     namespace = kubernetes_namespace.challengeone.metadata[0].name
   }
 
+  wait_for_rollout = false
+
   spec {
     replicas = 1
 
@@ -73,7 +75,8 @@ resource "kubernetes_deployment" "challengeone_app" {
               path = "/api/actuator/health/liveness"
               port = 8080
             }
-            failure_threshold = 15
+            initial_delay_seconds = 60
+            failure_threshold = 30
             period_seconds    = 10
           }
 
@@ -82,7 +85,8 @@ resource "kubernetes_deployment" "challengeone_app" {
               path = "/api/actuator/health/liveness"
               port = 8080
             }
-            period_seconds  = 10
+            initial_delay_seconds = 20
+            period_seconds  = 30
             timeout_seconds = 5
             failure_threshold = 3
           }
@@ -92,7 +96,8 @@ resource "kubernetes_deployment" "challengeone_app" {
               path = "/api/actuator/health/readiness"
               port = 8080
             }
-            period_seconds        = 10
+            initial_delay_seconds = 20
+            period_seconds        = 30
           }
           # Recursos otimizados para free tier (t3.micro tem 1 CPU, 1GB RAM)
           resources {
@@ -122,8 +127,8 @@ resource "kubernetes_deployment" "challengeone_app" {
     strategy {
       type = "RollingUpdate"
       rolling_update {
-        max_unavailable = 0
-        max_surge       = 1
+        max_unavailable = 1
+        max_surge       = 0
       }
     }
   }

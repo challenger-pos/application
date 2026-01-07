@@ -8,7 +8,7 @@ variable "environment" {
 }
 
 variable "region_default" {
-  default = "us-east-2"
+  default = "us-east-1"
 }
 
 variable "db_password" {
