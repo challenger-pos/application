@@ -23,6 +23,8 @@ public class GlobalExceptionHandler {
         exceptionStatusMap.put(NotFoundException.class, HttpStatus.NOT_FOUND);
         exceptionStatusMap.put(InternalServerErrorException.class, HttpStatus.INTERNAL_SERVER_ERROR);
         exceptionStatusMap.put(BusinessRuleException.class, HttpStatus.CONFLICT);
+        exceptionStatusMap.put(UnauthorizedException.class, HttpStatus.UNAUTHORIZED);
+        exceptionStatusMap.put(ForbiddenException.class, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(DomainException.class)

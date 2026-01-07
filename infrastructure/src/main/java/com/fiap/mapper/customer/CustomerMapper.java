@@ -26,7 +26,8 @@ public class CustomerMapper {
                 new ArrayList<>(),
                 new ArrayList<>(),
                 customer.getCreatedAt(),
-                customer.getUpdatedAt()
+                customer.getUpdatedAt(),
+                customer.getIsActive()
         );
     }
 
@@ -37,6 +38,7 @@ public class CustomerMapper {
                 DocumentNumber.fromPersistence(customerEntity.getDocumentNumber()),
                 customerEntity.getPhone(),
                 customerEntity.getEmail(),
+                customerEntity.getIsActive(),
                 customerEntity.getCreatedAt(),
                 customerEntity.getUpdatedAt()
         );

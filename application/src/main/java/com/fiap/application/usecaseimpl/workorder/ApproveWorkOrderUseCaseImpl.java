@@ -7,12 +7,15 @@ import com.fiap.core.domain.workorder.WorkOrder;
 import com.fiap.core.domain.workorder.WorkOrderPart;
 import com.fiap.core.domain.workorder.WorkOrderStatus;
 import com.fiap.core.exception.BadRequestException;
+import com.fiap.core.exception.ForbiddenException;
 import com.fiap.core.exception.NotFoundException;
+import com.fiap.core.exception.UnauthorizedException;
 import com.fiap.core.exception.enums.ErrorCodeEnum;
 import com.fiap.usecase.workorder.ApproveWorkOrderUseCase;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ApproveWorkOrderUseCaseImpl implements ApproveWorkOrderUseCase {
@@ -26,13 +29,21 @@ public class ApproveWorkOrderUseCaseImpl implements ApproveWorkOrderUseCase {
     }
 
     @Override
-    public void execute(UUID id) throws NotFoundException, BadRequestException {
+    public void execute(UUID id, String documentNumber) throws NotFoundException, BadRequestException, UnauthorizedException, ForbiddenException {
+
+        if (documentNumber == null) {
+            throw  new UnauthorizedException(ErrorCodeEnum.WORK0008.getMessage(), ErrorCodeEnum.WORK0008.getCode());
+        }
 
         WorkOrder workOrder = workOrderGateway.findById(id)
                 .orElseThrow(() -> new NotFoundException(ErrorCodeEnum.WORK0001.getMessage(), ErrorCodeEnum.WORK0001.getCode()));
 
         if (!WorkOrderStatus.AWAITING_APPROVAL.equals(workOrder.getStatus()))
             throw new BadRequestException(ErrorCodeEnum.WORK0006.getMessage(), ErrorCodeEnum.WORK0006.getCode());
+
+        if (!Objects.equals(workOrder.getCustomer().getDocumentNumber().getValue(), documentNumber)) {
+            throw new ForbiddenException(ErrorCodeEnum.WORK0007.getMessage(), ErrorCodeEnum.WORK0007.getCode());
+        }
 
         workOrder.approveStock();
         workOrder.setStatus(WorkOrderStatus.IN_PROGRESS);

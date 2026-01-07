@@ -50,6 +50,16 @@ public class CustomerConfig {
     }
 
     @Bean
+    public ActiveCustomerUseCase activeCustomerUseCase(CustomerGateway customerGateway){
+        return new ActiveCustomerUseCaseImpl(customerGateway);
+    }
+
+    @Bean
+    public InactiveCustomerUseCase inactiveCustomerUseCase(CustomerGateway customerGateway){
+        return new InactiveCustomerUseCaseImpl(customerGateway);
+    }
+
+    @Bean
     public CalculateAverageTimeWorkOrderUseCase calculateAverageTimeWorkOrderUseCase(WorkOrderGateway workOrderGateway) {
         return new CalculateAverageTimeWorkOrderUseCaseImpl(workOrderGateway);
     }

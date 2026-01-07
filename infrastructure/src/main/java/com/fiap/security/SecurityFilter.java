@@ -1,6 +1,7 @@
 package com.fiap.security;
 
 import com.fiap.persistence.repository.user.UserEntityRepository;
+import com.fiap.security.jwt.ClientJwtService;
 import com.fiap.security.jwt.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,10 +19,12 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
+    private final ClientJwtService clientJwtService;
     private final UserEntityRepository userEntityRepository;
 
-    public SecurityFilter(TokenService tokenService, UserEntityRepository userEntityRepository) {
+    public SecurityFilter(TokenService tokenService, ClientJwtService clientJwtService, UserEntityRepository userEntityRepository) {
         this.tokenService = tokenService;
+        this.clientJwtService = clientJwtService;
         this.userEntityRepository = userEntityRepository;
     }
 
@@ -39,6 +42,17 @@ public class SecurityFilter extends OncePerRequestFilter {
                 if (userDetails != null) {
                     var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } else {
+                try {
+                    String documentNumber = clientJwtService.getDocumentFromToken(token);
+                    request.setAttribute("documentNumber", documentNumber);
+                } catch (Exception e) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setCharacterEncoding("UTF-8");
+                    response.setContentType("text/plain; charset=UTF-8");
+                    response.getWriter().write("Token inválido");
+                    return;
                 }
             }
         }
