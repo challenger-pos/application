@@ -43,6 +43,6 @@ resource "kubernetes_service" "challengeone_app" {
       target_port = 8080
     }
 
-    type = "LoadBalancer"
+    type = "ClusterIP"
   }
 }
