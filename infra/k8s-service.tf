@@ -30,6 +30,13 @@ resource "kubernetes_service" "challengeone_app" {
     labels = {
       app = "challengeone"
     }
+    annotations = {
+      "service.beta.kubernetes.io/aws-load-balancer-type"        = "nlb"
+      "service.beta.kubernetes.io/aws-load-balancer-target-type" = "ip"
+      "service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol" = "HTTP"
+      "service.beta.kubernetes.io/aws-load-balancer-healthcheck-port"     = "8080"
+      "service.beta.kubernetes.io/aws-load-balancer-healthcheck-path"     = "/"
+    }
   }
 
   spec {
@@ -43,6 +50,6 @@ resource "kubernetes_service" "challengeone_app" {
       target_port = 8080
     }
 
-    type = "ClusterIP"
+    type = "LoadBalancer"
   }
 }
