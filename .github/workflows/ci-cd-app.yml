@@ -5,19 +5,18 @@ on:
     branches:
       - main
       - homologation
-      - 'feature/**'
   workflow_dispatch:
 
 env:
   AWS_REGION: us-east-2
-  ENVIRONMENT: ${{ github.ref_name == 'main' && 'production' || 'homologation' }}
+  ENVIRONMENT: ${{ github.ref_name == 'main' && 'production' || (github.ref_name == 'homologation' && 'homologation' || 'develop') }}
   IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/challengeone
 
 jobs:
   build-and-test:
     name: Build and Test Project
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name == 'main' && 'production' || 'homologation' }}
+    environment: ${{ github.ref_name == 'main' && 'production' || (github.ref_name == 'homologation' && 'homologation' || 'develop') }}
 
     steps:
       - name: Checkout code
@@ -36,7 +35,7 @@ jobs:
   push-and-deploy:
     name: Push Image & Deploy Infra
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name == 'main' && 'production' || 'homologation' }}
+    environment: ${{ github.ref_name == 'main' && 'production' || (github.ref_name == 'homologation' && 'homologation' || 'develop') }}
     needs: build-and-test
 
     env:
