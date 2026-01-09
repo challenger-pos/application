@@ -12,8 +12,10 @@ import com.fiap.core.domain.service.Service;
 import com.fiap.core.domain.user.User;
 import com.fiap.core.domain.vehicle.Vehicle;
 import com.fiap.core.domain.workorder.WorkOrder;
+import com.fiap.core.domain.workorder.WorkOrderHistory;
 import com.fiap.core.domain.workorder.WorkOrderPart;
 import com.fiap.core.domain.workorder.WorkOrderService;
+import com.fiap.core.domain.workorder.WorkOrderStatus;
 import com.fiap.core.exception.BadRequestException;
 import com.fiap.core.exception.BusinessRuleException;
 import com.fiap.core.exception.NotFoundException;
@@ -82,7 +84,14 @@ public class CreateWorkOrderUseCaseImpl implements CreateWorkOrderUseCase {
         workOrder.recalculateTotal();
         workOrder.reserveParts();
         partGateway.saveAll(parts);
-        return workOrderGateway.save(workOrder);
+        WorkOrder savedWorkOrder = workOrderGateway.save(workOrder);
+
+        // Salvar histórico com status RECEIVED
+        WorkOrderHistory history = new WorkOrderHistory(savedWorkOrder.getId(), WorkOrderStatus.RECEIVED);
+        history.setCreatedAt(savedWorkOrder.getCreatedAt());
+        workOrderGateway.saveHistory(history);
+
+        return savedWorkOrder;
     }
 
     private List<WorkOrderPart> populateParts(List<Part> parts, Map<UUID, WorkOrderPart> workOrderPartMap, WorkOrder workOrder) {

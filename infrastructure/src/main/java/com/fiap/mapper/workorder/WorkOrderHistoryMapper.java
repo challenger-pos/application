@@ -91,4 +91,15 @@ public class WorkOrderHistoryMapper {
         if (histories == null || histories.isEmpty()) return List.of();
         return histories.stream().map(this::toResponse).collect(Collectors.toList());
     }
+
+    public WorkOrderHistoryEntity toEntity(WorkOrderHistory history, WorkOrderEntity workOrderEntity) {
+        if (history == null) return null;
+
+        return WorkOrderHistoryEntity.builder()
+                .workOrder(workOrderEntity)
+                .status(history.getStatus())
+                .notes(history.getNotes())
+                .createdAt(history.getCreatedAt() != null ? history.getCreatedAt() : java.time.LocalDateTime.now())
+                .build();
+    }
 }

@@ -57,4 +57,9 @@ public class ServiceRepositoryGateway implements ServiceGateway {
     public boolean existsById(UUID id) {
         return repository.existsById(id);
     }
+
+    @Override
+    public void sendWorkOrderStatusTransitionDuration(long durationInSeconds, String statusTag) {
+
+    }
 }

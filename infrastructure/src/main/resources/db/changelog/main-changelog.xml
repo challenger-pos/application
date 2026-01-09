@@ -9,6 +9,7 @@
     <include file="users/create-users-table.xml" relativeToChangelogFile="true"/>
     <include file="parts/create-parts-table.xml" relativeToChangelogFile="true"/>
     <include file="services/create-services-table.xml" relativeToChangelogFile="true"/>
+    <include file="work-orders/create-work-order-history-table.xml" relativeToChangelogFile="true"/>
     <include file="vehicles/create-vehicles-table.xml" relativeToChangelogFile="true"/>
     <include file="work-orders/create-work-orders-table.xml" relativeToChangelogFile="true"/>
     <include file="work-orders/create-work-order-part-table.xml" relativeToChangelogFile="true"/>
