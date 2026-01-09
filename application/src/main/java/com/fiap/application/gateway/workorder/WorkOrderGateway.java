@@ -16,4 +16,6 @@ public interface WorkOrderGateway {
     List<WorkOrder> findByStatus(WorkOrderStatus workOrderStatus);
     List<WorkOrder> findAllOrdered(List<WorkOrderStatus> workOrderStatuses);
     List<WorkOrderHistory> getHistoryByCustomerCpfCnpj(String cpfCnpj);
+    void saveHistory(WorkOrderHistory history);
+    List<WorkOrderHistory> findHistoryByWorkOrderIdOrderByCreatedAtDesc(UUID workOrderId);
 }

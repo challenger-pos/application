@@ -3,6 +3,7 @@ package com.fiap.persistence.entity.workOrder;
 import com.fiap.core.domain.workorder.WorkOrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -31,6 +32,7 @@ public class WorkOrderHistoryEntity {
     @Column(name = "notes")
     private String notes;
 
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }

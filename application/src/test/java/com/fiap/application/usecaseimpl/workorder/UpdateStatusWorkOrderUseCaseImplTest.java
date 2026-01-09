@@ -1,5 +1,6 @@
 package com.fiap.application.usecaseimpl.workorder;
 
+import com.fiap.application.gateway.service.ServiceGateway;
 import com.fiap.application.gateway.workorder.WorkOrderGateway;
 import com.fiap.core.domain.workorder.WorkOrder;
 import com.fiap.core.domain.workorder.WorkOrderStatus;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.*;
 class UpdateStatusWorkOrderUseCaseImplTest {
 
     @Mock WorkOrderGateway workOrderGateway;
+    @Mock ServiceGateway serviceGateway;
     @Mock WorkOrder workOrder;
     @Mock WorkOrder updated;
 
@@ -33,7 +35,7 @@ class UpdateStatusWorkOrderUseCaseImplTest {
         UUID id = UUID.randomUUID();
         when(workOrderGateway.findById(id)).thenReturn(Optional.empty());
 
-        UpdateStatusWorkOrderUseCaseImpl useCase = new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway);
+        UpdateStatusWorkOrderUseCaseImpl useCase = new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway, serviceGateway);
 
         NotFoundException ex = assertThrows(NotFoundException.class, () -> useCase.execute(id, "IN_PROGRESS"));
         assert ex.getCode().equals(ErrorCodeEnum.WORK0001.getCode());
@@ -47,7 +49,7 @@ class UpdateStatusWorkOrderUseCaseImplTest {
         UUID id = UUID.randomUUID();
         when(workOrderGateway.findById(id)).thenReturn(Optional.of(workOrder));
 
-        UpdateStatusWorkOrderUseCaseImpl useCase = new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway);
+        UpdateStatusWorkOrderUseCaseImpl useCase = new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway, serviceGateway);
 
         BadRequestException ex = assertThrows(BadRequestException.class, () -> useCase.execute(id, "INVALID_STATUS"));
         assert ex.getCode().equals(ErrorCodeEnum.WORK0004.getCode());
@@ -63,7 +65,7 @@ class UpdateStatusWorkOrderUseCaseImplTest {
         when(workOrderGateway.findById(id)).thenReturn(Optional.of(workOrder));
         when(workOrder.getStatus()).thenReturn(WorkOrderStatus.IN_PROGRESS);
 
-        UpdateStatusWorkOrderUseCaseImpl useCase = new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway);
+        UpdateStatusWorkOrderUseCaseImpl useCase = new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway, serviceGateway);
 
         BadRequestException ex = assertThrows(BadRequestException.class, () -> useCase.execute(id, "IN_PROGRESS"));
         assert ex.getCode().equals(ErrorCodeEnum.WORK0005.getCode());
@@ -80,7 +82,7 @@ class UpdateStatusWorkOrderUseCaseImplTest {
         when(workOrder.getStatus()).thenReturn(WorkOrderStatus.IN_PROGRESS);
         when(workOrderGateway.update(workOrder)).thenReturn(updated);
 
-        UpdateStatusWorkOrderUseCaseImpl useCase = new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway);
+        UpdateStatusWorkOrderUseCaseImpl useCase = new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway, serviceGateway);
 
         WorkOrder result = useCase.execute(id, "DELIVERED");
 
@@ -103,7 +105,7 @@ class UpdateStatusWorkOrderUseCaseImplTest {
         when(workOrder.getStatus()).thenReturn(WorkOrderStatus.IN_PROGRESS);
         when(workOrderGateway.update(workOrder)).thenReturn(updated);
 
-        UpdateStatusWorkOrderUseCaseImpl useCase = new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway);
+        UpdateStatusWorkOrderUseCaseImpl useCase = new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway, serviceGateway);
 
         WorkOrder result = useCase.execute(id, "COMPLETED");
 
@@ -126,7 +128,7 @@ class UpdateStatusWorkOrderUseCaseImplTest {
         when(workOrder.getStatus()).thenReturn(WorkOrderStatus.RECEIVED);
         when(workOrderGateway.update(workOrder)).thenReturn(updated);
 
-        UpdateStatusWorkOrderUseCaseImpl useCase = new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway);
+        UpdateStatusWorkOrderUseCaseImpl useCase = new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway, serviceGateway);
 
         WorkOrder result = useCase.execute(id, "IN_DIAGNOSIS");
 
