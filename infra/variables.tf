@@ -4,18 +4,13 @@ variable "projectName" {
 
 variable "environment" {
   type = string
-  default = "develop"
+  default = "homologation"
 }
 
 variable "region_default" {
   default = "us-east-2"
 }
 
-variable "db_password" {
-  description = "Database password (set via CI as TF_VAR_db_password)"
-  type        = string
-  sensitive   = true
-}
 
 variable "db_schema" {
   type = string
@@ -27,6 +22,12 @@ variable "tags" {
     Name = "g19-challengeone"
   }
   
+}
+
+variable "db_password" {
+  description = "Database password (set via CI as TF_VAR_db_password)"
+  type        = string
+  sensitive   = true
 }
 
 variable "db_username" {

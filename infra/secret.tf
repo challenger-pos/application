@@ -1,4 +1,4 @@
-resource "kubernetes_secret" "challengeone_db" {
+resource "kubernetes_secret" "challengeone_secret" {
   metadata {
     name      = "challengeone-db-secret"
     namespace = kubernetes_namespace.challengeone.metadata[0].name
