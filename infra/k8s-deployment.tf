@@ -52,7 +52,7 @@ resource "kubernetes_deployment" "challengeone_app" {
 
           env {
             name  = "SPRING_DATASOURCE_URL"
-            value = "jdbc:postgresql://${data.terraform_remote_state.rds.outputs.rds_endpoint_host}:${data.terraform_remote_state.rds.outputs.db_port}/${data.terraform_remote_state.rds.outputs.db_name}?currentSchema=${var.environment}"
+            value = "jdbc:postgresql://${data.terraform_remote_state.rds.outputs.rds_endpoint_host}:${data.terraform_remote_state.rds.outputs.db_port}/${data.terraform_remote_state.rds.outputs.db_name}?currentSchema=${var.db_schema}"
           }
 
           env {

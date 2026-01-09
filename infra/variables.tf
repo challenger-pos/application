@@ -8,13 +8,18 @@ variable "environment" {
 }
 
 variable "region_default" {
-  default = "us-east-1"
+  default = "us-east-2"
 }
 
 variable "db_password" {
   description = "postgres123"
   default = "postgres123"
   sensitive   = true
+}
+
+variable "db_schema" {
+  type = string
+  default = "public"
 }
 
 variable "tags" {
