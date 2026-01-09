@@ -35,7 +35,7 @@ resource "kubernetes_deployment" "challengeone_app" {
       spec {
         container {
           name              = "challengeone"
-          image             = "thiagotierre/challengeone:1"
+          image             = "thiagotierre/challengeone:latest"
           image_pull_policy = "Always"
           
 
@@ -70,6 +70,11 @@ resource "kubernetes_deployment" "challengeone_app" {
             value = var.environment
           }
 
+          env {
+            name  = "JAVA_TOOL_OPTIONS"
+            value = "-XX:+UseSerialGC -XX:MaxRAMPercentage=75 -Xss512k"
+          }
+
           startup_probe {
             http_get {
               path = "/api/actuator/health/liveness"
@@ -85,7 +90,7 @@ resource "kubernetes_deployment" "challengeone_app" {
               path = "/api/actuator/health/liveness"
               port = 8080
             }
-            initial_delay_seconds = 20
+            initial_delay_seconds = 30
             period_seconds  = 30
             timeout_seconds = 5
             failure_threshold = 3
@@ -96,18 +101,18 @@ resource "kubernetes_deployment" "challengeone_app" {
               path = "/api/actuator/health/readiness"
               port = 8080
             }
-            initial_delay_seconds = 20
+            initial_delay_seconds = 30
             period_seconds        = 30
           }
           # Recursos otimizados para free tier (t3.micro tem 1 CPU, 1GB RAM)
           resources {
             requests = {
-              cpu    = "100m"
-              memory = "256Mi"
+              cpu    = "50m"
+              memory = "320Mi"
             }
             limits = {
-              cpu    = "250m"
-              memory = "512Mi"
+              cpu    = "500m"
+              memory = "448Mi"
             }
           }
           
