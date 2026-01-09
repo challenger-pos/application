@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: challengeone
-          image: thiagotierre/challengeone:1
+          image: thiagotierre/challengeone:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

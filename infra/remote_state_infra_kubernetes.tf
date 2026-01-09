@@ -3,7 +3,7 @@ data "terraform_remote_state" "infra" {
 
   config = {
     bucket = "tf-state-challenge-bucket"
-    key    = "kubernetes/terraform.tfstate"
+    key    = local.infra_kubernetes_state_path
     region = "us-east-2"
   }
 }
