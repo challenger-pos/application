@@ -33,10 +33,11 @@ build/
 .vscode/
 
 ### Terraform ###
-.terraform/
 *.tfstate
+*.tfstate*
 *.tfstate.backup
 terraform.tfstate.backup
 *.tfvars
 terraform-provider-*.exe
-*.tfstate*
+.terraform/
+.terraform/*
