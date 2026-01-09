@@ -4,7 +4,7 @@ variable "projectName" {
 
 variable "environment" {
   type = string
-  default = "develop"
+  default = "homologation"
 }
 
 variable "region_default" {
@@ -12,9 +12,8 @@ variable "region_default" {
 }
 
 variable "db_password" {
-  description = "postgres123"
-  default = "postgres123"
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
 variable "db_schema" {

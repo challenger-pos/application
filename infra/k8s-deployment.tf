@@ -1,10 +1,5 @@
 resource "kubernetes_deployment" "challengeone_app" {
 
-  # depends_on = [
-  #   kubernetes_deployment.challengeone_db
-  # ]
-  # Comentado para testar deployment sem banco de dados
-
   depends_on = [
     kubernetes_namespace.challengeone 
   ]
@@ -42,13 +37,6 @@ resource "kubernetes_deployment" "challengeone_app" {
           port {
             container_port = 8080
           }
-
-          # env_from {
-          #   secret_ref {
-          #     name = kubernetes_secret.challengeone_db.metadata[0].name
-          #   }
-          # }
-          # Comentado para testar sem banco de dados
 
           env {
             name  = "SPRING_DATASOURCE_URL"
