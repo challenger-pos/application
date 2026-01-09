@@ -30,8 +30,8 @@ public class WorkOrderConfig {
     }
 
     @Bean
-    public UpdateStatusWorkOrderUseCase updateStatusWorkOrderUseCase(WorkOrderGateway workOrderGateway) {
-        return new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway);
+    public UpdateStatusWorkOrderUseCase updateStatusWorkOrderUseCase(WorkOrderGateway workOrderGateway, ServiceGateway serviceGateway) {
+        return new UpdateStatusWorkOrderUseCaseImpl(workOrderGateway, serviceGateway);
     }
 
     @Bean
