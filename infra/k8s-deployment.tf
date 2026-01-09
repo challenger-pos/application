@@ -67,7 +67,7 @@ resource "kubernetes_deployment" "challengeone_app" {
 
           env {
             name  = "DB_SCHEMA"
-            value = var.environment
+            value = "public"
           }
 
           env {

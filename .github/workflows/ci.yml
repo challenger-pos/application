@@ -2,15 +2,22 @@ name: CI - Spring Boot Build, Test, Push & Deploy with Terraform
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - homologation
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
 
+env:
+  AWS_REGION: us-east-2
+  ENVIRONMENT: ${{ github.ref_name == 'main' && 'production' || (github.ref_name == 'homologation' && 'homologation' || 'develop') }}
+
 jobs:
   build-and-test:
     name: Build and Test Project
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'production' || github.ref_name }}
 
     env:
       IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/challengeone
@@ -45,7 +52,8 @@ jobs:
 
   push-and-deploy:
     name: Push Image & Deploy Infra
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'production' || github.ref_name }}
     needs: build-and-test  # ✅ Só executa após o primeiro job terminar com sucesso
 
     env:
@@ -102,3 +110,5 @@ jobs:
       - name: Terraform Apply
         working-directory: ${{ env.TERRAFORM_DIR }}
         run: terraform apply -auto-approve
+        env:
+          TF_VAR_environment: ${{ env.ENVIRONMENT }}
