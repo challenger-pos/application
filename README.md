@@ -202,10 +202,3 @@ kubectl get events -n challengeone --sort-by='.metadata.creationTimestamp'
 4. Secrets e permissões configurados corretamente
 
 ---
-
-Se quiser, posso:
-
-- adicionar um **script de bootstrap** (por exemplo `scripts/bootstrap-eks.sh`) que cria um cluster EKS mínimo, configura kubeconfig e prepara o ambiente, ou
-- adicionar um **workflow** de deploy com Canary / Blue-Green usando GitHub Actions and `kubectl`/`argocd`.
-
-Responda com **"bootstrap"**, **"workflow"**, ou **"ambos"** que eu já crio os arquivos. Boa revisão!
