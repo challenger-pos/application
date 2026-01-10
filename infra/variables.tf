@@ -4,28 +4,21 @@ variable "projectName" {
 
 variable "environment" {
   type = string
-  default = "develop"
+  default = "homologation"
 }
 
 variable "region_default" {
   default = "us-east-2"
 }
 
+variable "db_password" {
+  type      = string
+  sensitive = true
+}
+
 variable "db_schema" {
   type = string
   default = "public"
-}
-
-variable "db_password" {
-  description = "Database password (set via CI)"
-  type        = string
-  sensitive   = true
-}
-
-variable "db_username" {
-  description = "Database username"
-  type        = string
-  default     = "postgres"
 }
 
 variable "tags" {

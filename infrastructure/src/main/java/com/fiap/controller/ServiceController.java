@@ -7,6 +7,10 @@ import com.fiap.dto.service.ServiceResponse;
 import com.fiap.dto.service.UpdateServiceRequest;
 import com.fiap.mapper.service.ServiceMapper;
 import com.fiap.usecase.service.*;
+import datadog.trace.api.Trace;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
@@ -41,13 +45,25 @@ public class ServiceController {
     @ApiResponse(responseCode = "201", description = "Serviço criado")
     @PostMapping
     public ResponseEntity<ServiceResponse> createService(@Valid @RequestBody CreateServiceRequest request) {
+        Span span = GlobalTracer.get().activeSpan();
+        if (span != null) {
+            span.setTag("operation.type", "create");
+        }
         Service newService = createServiceUseCase.execute(serviceMapper.toDomain(request));
+        if (span != null && newService != null) {
+            span.setTag("service.id", newService.getId().toString());
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(serviceMapper.toResponse(newService));
     }
 
     @Operation(summary = "Busca um serviço pelo ID")
     @GetMapping("/{id}")
     public ResponseEntity<ServiceResponse> findServiceById(@PathVariable UUID id) throws NotFoundException {
+        Span span = GlobalTracer.get().activeSpan();
+        if (span != null) {
+            span.setTag("operation.type", "findById");
+            span.setTag("service.id", id.toString());
+        }
         Service service = findServiceByIdUseCase.execute(id);
         return ResponseEntity.ok(serviceMapper.toResponse(service));
     }
@@ -62,6 +78,11 @@ public class ServiceController {
     @Operation(summary = "Atualiza um serviço")
     @PutMapping("/{id}")
     public ResponseEntity<ServiceResponse> updateService(@PathVariable UUID id, @Valid @RequestBody UpdateServiceRequest request) throws NotFoundException {
+        Span span = GlobalTracer.get().activeSpan();
+        if (span != null) {
+            span.setTag("operation.type", "update");
+            span.setTag("service.id", id.toString());
+        }
         Service updatedService = updateServiceUseCase.execute(serviceMapper.toDomain(id, request));
         return ResponseEntity.ok(serviceMapper.toResponse(updatedService));
     }
@@ -70,6 +91,11 @@ public class ServiceController {
     @ApiResponse(responseCode = "204", description = "Serviço deletado")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteService(@PathVariable UUID id) throws NotFoundException {
+        Span span = GlobalTracer.get().activeSpan();
+        if (span != null) {
+            span.setTag("operation.type", "delete");
+            span.setTag("service.id", id.toString());
+        }
         deleteServiceUseCase.execute(id);
         return ResponseEntity.noContent().build();
     }

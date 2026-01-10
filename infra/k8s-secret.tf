@@ -5,10 +5,10 @@ resource "kubernetes_secret" "challengeone_secret" {
   }
 
   data = {
-    POSTGRES_USER                = var.db_username
-    POSTGRES_PASSWORD            = var.db_password
-    SPRING_DATASOURCE_USERNAME   = var.db_username
-    SPRING_DATASOURCE_PASSWORD   = var.db_password
+    POSTGRES_USER              = data.terraform_remote_state.rds.outputs.db_username
+    POSTGRES_PASSWORD          = var.db_password
+    SPRING_DATASOURCE_USERNAME = data.terraform_remote_state.rds.outputs.db_username
+    SPRING_DATASOURCE_PASSWORD = var.db_password
   }
 
   type = "Opaque"

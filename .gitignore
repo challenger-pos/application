@@ -35,6 +35,7 @@ build/
 ### Terraform ###
 *.tfstate
 *.tfstate*
+*.tfstate.backup
 terraform.tfstate.backup
 *.tfvars
 terraform-provider-*.exe

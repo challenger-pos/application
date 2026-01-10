@@ -35,7 +35,7 @@ resource "kubernetes_deployment" "challengeone_app" {
         # }
         container {
           name              = "challengeone"
-          image             = "thiagotierre/challengeone:1"
+          image             = "thiagotierre/challengeone:latest"
           image_pull_policy = "Always"
 
           port {

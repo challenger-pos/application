@@ -1,10 +1,5 @@
 resource "kubernetes_deployment" "challengeone_app" {
 
-  # depends_on = [
-  #   kubernetes_deployment.challengeone_db
-  # ]
-  # Comentado para testar deployment sem banco de dados
-
   depends_on = [
     kubernetes_namespace.challengeone 
   ]
@@ -65,10 +60,10 @@ resource "kubernetes_deployment" "challengeone_app" {
           }
 
           env_from {
-            secret_ref {
-              name = "challengeone-secret"
+              secret_ref {
+                name = kubernetes_secret.challengeone_secret.metadata[0].name
+              }
             }
-          }
 
           env {
             name  = "SPRING_DATASOURCE_URL"
@@ -130,11 +125,6 @@ resource "kubernetes_deployment" "challengeone_app" {
             value = "public"
           }
 
-          env {
-            name  = "JAVA_TOOL_OPTIONS"
-            value = "-XX:+UseSerialGC -XX:MaxRAMPercentage=75 -Xss512k"
-          }
-
           startup_probe {
             http_get {
               path = "/api/actuator/health/liveness"
@@ -164,7 +154,7 @@ resource "kubernetes_deployment" "challengeone_app" {
             initial_delay_seconds = 30
             period_seconds        = 30
           }
-          
+
           resources {
             requests = {
               cpu    = "50m"
@@ -175,7 +165,7 @@ resource "kubernetes_deployment" "challengeone_app" {
               memory = "448Mi"
             }
           }
-          
+
           security_context {
             allow_privilege_escalation = false
             read_only_root_filesystem = false
