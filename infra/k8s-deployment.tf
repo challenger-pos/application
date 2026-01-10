@@ -66,8 +66,13 @@ resource "kubernetes_deployment" "challengeone_app" {
 
           env_from {
             secret_ref {
-              name = kubernetes_secret.challengeone_secret.metadata[0].name
+              name = "challengeone-secret"
             }
+          }
+
+          env {
+            name  = "SPRING_DATASOURCE_URL"
+            value = "jdbc:postgresql://${data.terraform_remote_state.rds.outputs.rds_endpoint_host}:${data.terraform_remote_state.rds.outputs.db_port}/${data.terraform_remote_state.rds.outputs.db_name}?currentSchema=${var.db_schema}"
           }
 
           env {
@@ -153,15 +158,13 @@ resource "kubernetes_deployment" "challengeone_app" {
 
           readiness_probe {
             http_get {
-              path = "/api/actuator/health"
+              path = "/api/actuator/health/readiness"
               port = 8080
             }
-            initial_delay_seconds = 100
-            period_seconds        = 5
-            timeout_seconds       = 2
-            failure_threshold     = 5
+            initial_delay_seconds = 30
+            period_seconds        = 30
           }
-          # Recursos otimizados para free tier (t3.micro tem 1 CPU, 1GB RAM)
+          
           resources {
             requests = {
               cpu    = "50m"
@@ -173,7 +176,6 @@ resource "kubernetes_deployment" "challengeone_app" {
             }
           }
           
-
           security_context {
             allow_privilege_escalation = false
             read_only_root_filesystem = false
