@@ -4,7 +4,7 @@ variable "projectName" {
 
 variable "environment" {
   type = string
-  default = "develop"
+  default = "homologation"
 }
 
 variable "region_default" {
