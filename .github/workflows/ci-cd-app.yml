@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - homologation
-      - 'feature/**'
   workflow_dispatch:
 
 env:
@@ -58,6 +57,13 @@ jobs:
           terraform_version: "1.7.0"
           terraform_wrapper: false
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -73,3 +79,15 @@ jobs:
           docker push $IMAGE_NAME:${{ env.TAG }}
           docker tag $IMAGE_NAME:${{ env.TAG }} $IMAGE_NAME:latest
           docker push $IMAGE_NAME:latest
+
+      - name: Terraform Init
+        working-directory: ${{ env.TERRAFORM_DIR }}
+        run: terraform init -backend-config="key=app/${{ env.ENVIRONMENT }}/terraform.tfstate"
+
+      - name: Terraform Apply
+        working-directory: ${{ env.TERRAFORM_DIR }}
+        run: terraform apply -auto-approve
+        env:
+          TF_VAR_environment: ${{ env.ENVIRONMENT }}
+          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+          TF_VAR_image_tag: ${{ env.TAG }}

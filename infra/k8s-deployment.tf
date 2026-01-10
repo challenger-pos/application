@@ -88,7 +88,7 @@ resource "kubernetes_deployment" "challengeone_app" {
             initial_delay_seconds = 30
             period_seconds        = 30
           }
-          # Recursos otimizados para free tier (t3.micro tem 1 CPU, 1GB RAM)
+
           resources {
             requests = {
               cpu    = "50m"
