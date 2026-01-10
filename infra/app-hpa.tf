@@ -17,7 +17,6 @@ resource "kubernetes_horizontal_pod_autoscaler" "challengeone_hpa" {
 			name        = kubernetes_deployment.challengeone_app.metadata[0].name
 		}
 
-		# Simple CPU-based target. Adjust percentage as needed.
 		target_cpu_utilization_percentage = 30
 	}
 }
