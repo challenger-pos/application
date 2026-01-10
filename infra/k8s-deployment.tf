@@ -38,19 +38,15 @@ resource "kubernetes_deployment" "challengeone_app" {
             container_port = 8080
           }
 
+          env_from {
+              secret_ref {
+                name = kubernetes_secret.challengeone_secret.metadata[0].name
+              }
+            }
+
           env {
             name  = "SPRING_DATASOURCE_URL"
             value = "jdbc:postgresql://${data.terraform_remote_state.rds.outputs.rds_endpoint_host}:${data.terraform_remote_state.rds.outputs.db_port}/${data.terraform_remote_state.rds.outputs.db_name}?currentSchema=${var.db_schema}"
-          }
-
-          env {
-            name  = "SPRING_DATASOURCE_USERNAME"
-            value = data.terraform_remote_state.rds.outputs.db_username
-          }
-
-          env {
-            name  = "SPRING_DATASOURCE_PASSWORD"
-            value = var.db_password
           }
 
           env {
@@ -92,7 +88,7 @@ resource "kubernetes_deployment" "challengeone_app" {
             initial_delay_seconds = 30
             period_seconds        = 30
           }
-          # Recursos otimizados para free tier (t3.micro tem 1 CPU, 1GB RAM)
+
           resources {
             requests = {
               cpu    = "50m"
