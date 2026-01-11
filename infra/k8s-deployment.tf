@@ -100,7 +100,7 @@ resource "kubernetes_deployment" "challengeone_app" {
           }
           env {
             name  = "DD_AGENT_HOST"
-            value = "datadog-agent.default.svc.cluster.local"
+            value = "datadog-agent.datadog-agent.svc.cluster.local"
           }
           env {
             name  = "DD_DOGSTATSD_PORT"
@@ -108,7 +108,7 @@ resource "kubernetes_deployment" "challengeone_app" {
           }
           env {
             name  = "DATADOG_STATSD_HOST"
-            value = "datadog-agent.default.svc.cluster.local"
+            value = "datadog-agent.datadog-agent.svc.cluster.local"
           }
           env {
             name  = "DATADOG_STATSD_PORT"
@@ -130,7 +130,7 @@ resource "kubernetes_deployment" "challengeone_app" {
               path = "/api/actuator/health/liveness"
               port = 8080
             }
-            initial_delay_seconds = 60
+            initial_delay_seconds = 120
             failure_threshold = 30
             period_seconds    = 10
           }
@@ -140,7 +140,7 @@ resource "kubernetes_deployment" "challengeone_app" {
               path = "/api/actuator/health/liveness"
               port = 8080
             }
-            initial_delay_seconds = 30
+            initial_delay_seconds = 60
             period_seconds  = 30
             timeout_seconds = 5
             failure_threshold = 3
@@ -151,18 +151,18 @@ resource "kubernetes_deployment" "challengeone_app" {
               path = "/api/actuator/health/readiness"
               port = 8080
             }
-            initial_delay_seconds = 30
+            initial_delay_seconds = 60
             period_seconds        = 30
           }
 
           resources {
             requests = {
               cpu    = "50m"
-              memory = "320Mi"
+              memory = "512Mi"
             }
             limits = {
               cpu    = "500m"
-              memory = "448Mi"
+              memory = "1Gi"
             }
           }
 
