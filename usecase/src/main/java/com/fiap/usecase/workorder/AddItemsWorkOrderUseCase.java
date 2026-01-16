@@ -1,0 +1,13 @@
+package com.fiap.usecase.workorder;
+
+import com.fiap.core.domain.workorder.WorkOrder;
+import com.fiap.core.exception.BadRequestException;
+import com.fiap.core.exception.BusinessRuleException;
+import com.fiap.core.exception.NotFoundException;
+
+import java.util.UUID;
+
+public interface AddItemsWorkOrderUseCase {
+
+    public WorkOrder execute(UUID workOrderId, WorkOrder workOrder) throws NotFoundException, BusinessRuleException, BadRequestException;
+}
