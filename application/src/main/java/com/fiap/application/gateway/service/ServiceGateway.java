@@ -12,4 +12,5 @@ public interface ServiceGateway {
     Optional<Service> findById(UUID id);
     List<Service> findByIds(List<UUID> ids);
     boolean existsById(UUID id);
+    void sendWorkOrderStatusTransitionDuration(long durationInSeconds, String statusTag);
 }

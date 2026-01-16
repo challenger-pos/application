@@ -39,4 +39,15 @@ public interface WorkOrderRepository extends JpaRepository<WorkOrderEntity, UUID
     List<WorkOrderEntity> findAllOrdered(
             @Param("excludedStatuses") List<WorkOrderStatus> excludedStatuses
     );
+
+    @Query("""
+        select w
+        from WorkOrderEntity w
+          join w.customer c
+        where c.documentNumber = :documentNumber
+        order by w.createdAt asc
+    """)
+    List<WorkOrderEntity> findByCustomerDocumentNumberOrderByCreatedAtAsc(
+            @Param("documentNumber") String documentNumber
+    );
 }

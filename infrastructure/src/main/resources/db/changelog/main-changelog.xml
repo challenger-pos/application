@@ -13,6 +13,7 @@
     <include file="work-orders/create-work-orders-table.xml" relativeToChangelogFile="true"/>
     <include file="work-orders/create-work-order-part-table.xml" relativeToChangelogFile="true"/>
     <include file="work-orders/create-work-orders-services-table.xml" relativeToChangelogFile="true"/>
+    <include file="work-orders/create-work-order-history-table.xml" relativeToChangelogFile="true"/>
     <include file="users/inserts/insert-adm-user.xml" relativeToChangelogFile="true"/>
     <include file="customers/inserts/insert-customers.xml" relativeToChangelogFile="true"/>
     <include file="parts/inserts/insert-parts.xml" relativeToChangelogFile="true"/>
