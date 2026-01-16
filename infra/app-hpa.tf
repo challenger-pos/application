@@ -9,7 +9,7 @@ resource "kubernetes_horizontal_pod_autoscaler" "challengeone_hpa" {
 
 	spec {
 		min_replicas = 2
-		max_replicas = 5
+		max_replicas = 4
 
 		scale_target_ref {
 			api_version = "apps/v1"
