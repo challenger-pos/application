@@ -64,6 +64,8 @@ Integração com `infra-kubernetes`: a infraestrutura central (cluster, security
 ## Swagger
 - <URL_do_gateway>/api/swagger
 
+Alternativamente, collection disponível para consumo via gateway no repositório do gateway, em `challenger-pos`/`gateway`
+
 ## Arquitetura
 
 Disponível em /documentation.
