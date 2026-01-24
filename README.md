@@ -63,3 +63,7 @@ Integração com `infra-kubernetes`: a infraestrutura central (cluster, security
 
 ## Swagger
 - <URL_do_gateway>/api/swagger
+
+## Arquitetura
+
+Disponível em /documentation.
